@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Alberto Melendez, Lab4</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+
+</head>
+  <body>
+<div id="map" style="width: 800px; height: 500px; margin: auto"></div>
+<script type="text/javascript">
+
+  var map = L.map('map').setView([47.656896, -122.307511], 16);
+
+  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+var MyZoneUW = { "type": "FeatureCollection","features": [{"type": "Feature",
+"properties": {"name": "Mary Gates", "PopupContents": "My Info Classes",
+"Indoor": "Yes"}, "geometry": {"type": "Polygon", "coordinates": [[[-122.307219, 47.654497],
+  [-122.307419, 47.654443], [-122.307478, 47.654520],
+    [-122.307850, 47.654395], [-122.308368, 47.655076],
+  [-122.307736, 47.655290]]] } },
+
+{"type": "Feature", "properties": {"name": "Sieg Hall", "PopupContents":
+"Old Computer Science Building", "Indoor": "Yes"}, "geometry": {"type": "Polygon",
+"coordinates": [[[-122.306092, 47.654963], [-122.306843, 47.654735],
+[-122.306956, 47.654883], [-122.306194, 47.655111]]] } },
+
+{"type": "Feature", "properties": {"name": "HUB Lawn", "PopupContents":
+"Google Maps only labels this side as the HUB Lawn.", "Indoor": "No"}, "geometry": {"type": "Polygon",
+"coordinates": [[[-122.306672, 47.655835], [-122.305888, 47.656344],
+[-122.305571, 47.656145], [-122.305727, 47.655636],
+[-122.305727, 47.655636], [-122.306634, 47.655683],
+[-122.306618, 47.655766], [-122.306666, 47.655834]]] } }
+
+]
+
+}
+
+
+var geojsonLayer = L.geoJSON(MyZoneUW, {style: styleFunction, onEachFeature:
+happenHover}).addTo(map);
+
+/*function styleFunction(feature) {
+  switch (Feature.properties.Indoor) {
+    case "Yes": return {color: "red"};
+    case "No": return {color: "purple"};
+  }
+}*/
+
+function styleFunction(){return{color:"purple"};}
+
+  function newStyle(){geojsonLayer.setStyle({color:"green"});}
+  function oldStyle(){geojsonLayer.setStyle({color:"purple"});} // I wanted it to stay purple after hovering.
+
+  function happenHover(Feature, layer){
+layer.bindPopup(Feature.properties.name + '<br>' +
+Feature.properties.PopupContents, {closeButton:false});
+
+  layer.on('mouseover', function(){layer.openPopup();});
+  layer.on('mouseover', newStyle);
+  layer.on('mouseout', oldStyle);
+  layer.on('mouseout', function(){layer.closePopup();});
+}
+
+var m1 = L.icon({iconUrl: // I added this marker/icon to be creative
+'https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-03.png',
+iconSize:	[38, 38]}); //size of the icon
+var marker1 = L.marker([47.656628, -122.310363], {icon:
+m1, draggable:false}).addTo( map ).bindPopup("Study! Odegaard is open 24/7!");
+// This thumbnail is free and open-source, here's the link
+// https://www.adazing.com/book-clipart/
+</script>
+
+<p>This is an interactive web map of UW, with the polyons being the places I feel
+comfortable at.</p>
+
+  </body>
+</html>
